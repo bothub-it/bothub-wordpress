@@ -1,0 +1,31 @@
+# Attention:
+# Use this docker-compose to:
+# - Up development environment: docker-compose up
+# - Build docker images: docker-compose build
+
+version: '3.6'
+
+services:
+    database:
+        image: mariadb:10.2
+        environment:
+            MYSQL_ROOT_PASSWORD: bothub
+            MYSQL_DATABASE: bothub
+            MYSQL_USER: bothub
+            MYSQL_PASSWORD: bothub
+        networks:
+            - database_network
+    wordpress:
+        image: ${DOCKER_IMAGE_NAME:-ilha/bothub-wordpress}:${TAG:-latest}
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - 80:80
+        networks:
+            - database_network
+        depends_on:
+            - database
+networks:
+    database_network:
+        driver: bridge
