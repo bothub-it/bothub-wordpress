@@ -13,6 +13,8 @@ services:
             MYSQL_DATABASE: bothub
             MYSQL_USER: bothub
             MYSQL_PASSWORD: bothub
+        volumes:
+            - database:/var/lib/mysql
         networks:
             - database_network
     wordpress:
@@ -22,10 +24,17 @@ services:
             dockerfile: Dockerfile
         ports:
             - 80:80
+        volumes:
+            - wordpress:/var/www/app
         networks:
             - database_network
         depends_on:
             - database
+
+volumes:
+    wordpress:
+    database:
+
 networks:
     database_network:
         driver: bridge
